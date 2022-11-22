@@ -1,0 +1,41 @@
+{
+  "name": "projeto15-matera-back",
+  "version": "1.0.0",
+  "description": "Parte do projeto 15 da Driven - API da Matera",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcfernandez/driven-projeto15-matera-back.git"
+  },
+  "keywords": [
+    "driven",
+    "matera",
+    "api",
+    "javascript",
+    "node",
+    "express",
+    "mongodb",
+    "Laisses",
+    "lcfernandez"
+  ],
+  "author": "lcfernandez",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/lcfernandez/driven-projeto15-matera-back/issues"
+  },
+  "homepage": "https://github.com/lcfernandez/driven-projeto15-matera-back#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.7.0",
+    "mongodb": "^4.12.0",
+    "uuid": "^9.0.0"
+  }
+}
