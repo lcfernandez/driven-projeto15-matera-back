@@ -23,7 +23,7 @@ export const signUp = async (req, res) => {
 
 export const signIn = async (req, res) => {
     const { email, password } = req.body;
-    
+
     const activeUser = await req.collections.users.findOne({ email });
     const rightPassword = bcrypt.compareSync(password, activeUser?.password || "");
 
@@ -49,27 +49,17 @@ export const signIn = async (req, res) => {
 };
 
 export const findProducts = async (req, res) => {
-    try {
-        const products = await req.collections.products
-            .find()
-            .sort({date: -1})
-            .toArray();
+    const products = await req.collections.products
+        .find()
+        .sort({ date: -1 })
+        .toArray();
 
-        res.status(200).send(products);
-    } catch(err) {
-        console.log(err);
-        res.status(500).send({message: "Internal Server Error"});
-    }
+    res.status(200).send(products);
 };
 
 export const addProduct = async (req, res) => {
     const product = req.body;
 
-    try {
-        await req.collections.products.insertOne({...product});
-        res.sendStatus(201);
-    } catch(err) {
-        console.log(err);
-        res.status(500).send({message: "Internal Server Error"});
-    }
+    await req.collections.products.insertOne({ ...product });
+    res.sendStatus(201);
 };

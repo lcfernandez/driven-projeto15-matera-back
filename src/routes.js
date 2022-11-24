@@ -10,6 +10,6 @@ export const routes = (app, db) => {
     app.post("/sign-up", middlewares.validate(schemas.newUser), middlewares.asyncError(handlers.signUp));
     app.post("/sign-in", middlewares.validate(schemas.user), middlewares.asyncError(handlers.signIn));
 
-    app.get("/products", handlers.findProducts);
-    app.post("/products", middlewares.validate(schemas.product), handlers.addProduct);
+    app.get("/products", middlewares.asyncError(handlers.findProducts));
+    app.post("/products", middlewares.validate(schemas.product), middlewares.asyncError(handlers.addProduct));
 };
