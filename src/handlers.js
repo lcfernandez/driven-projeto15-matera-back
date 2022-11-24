@@ -1,3 +1,4 @@
+import { v4 as uuidV4 } from "uuid";
 import bcrypt from "bcrypt";
 
 export const signUp = async (req, res) => {
@@ -18,6 +19,33 @@ export const signUp = async (req, res) => {
     });
 
     res.sendStatus(201);
+};
+
+export const signIn = async (req, res) => {
+    const { email, password } = req.body;
+    
+    const activeUser = await req.collections.users.findOne({ email });
+    const rightPassword = bcrypt.compareSync(password, activeUser?.password || "");
+
+    if (!activeUser || !rightPassword) {
+        return res.status(401).send({ message: `invalid username or password` });
+    }
+
+    const name = activeUser.name;
+    const session = await req.collections.sessions.findOne({ id: activeUser._id });
+
+    if (session) {
+        return res.status(401).send({ message: `this account is already logged in` });
+    }
+
+    const token = uuidV4();
+
+    await req.collections.sessions.insertOne({
+        token,
+        id: activeUser._id
+    });
+
+    res.status(200).send({ token, name });
 };
 
 export const findProducts = async (req, res) => {
