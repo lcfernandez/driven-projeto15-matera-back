@@ -31,10 +31,10 @@ export const signIn = async (req, res) => {
         return res.status(401).send({ message: `invalid username or password` });
     }
 
-    const username = activeUser.username;
-    const userSession = await req.collections.sessions.findOne({ userId: activeUser._id });
+    const name = activeUser.name;
+    const session = await req.collections.sessions.findOne({ id: activeUser._id });
 
-    if (userSession) {
+    if (session) {
         return res.status(401).send({ message: `this account is already logged in` });
     }
 
@@ -42,10 +42,10 @@ export const signIn = async (req, res) => {
 
     await req.collections.sessions.insertOne({
         token,
-        userId: activeUser._id
+        id: activeUser._id
     });
 
-    res.status(200).send({ token, username });
+    res.status(200).send({ token, name });
 };
 
 export const findProducts = async (req, res) => {
