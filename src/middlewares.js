@@ -30,3 +30,14 @@ export const validate = schema => (req, res, next) => {
 
     next();
 };
+
+export const asyncError = handlerFn => async (req, res, next) => {
+    try {
+        await handlerFn(req, res, next);
+    } catch (err) {
+        console.warn(err);
+        res.status(500).send({
+            message: "Internal Server Error"
+        });
+    }
+};
