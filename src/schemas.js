@@ -16,4 +16,4 @@ export const product = joi.object({
     date: joi.string().required(),
     image: joi.string().required(),
     type: joi.valid("sofa", "cadeira", "mesa", "cama").required(),
-);
+});
