@@ -32,7 +32,7 @@ export const signIn = async (req, res) => {
     }
 
     const name = activeUser.name;
-    const session = await req.collections.sessions.findOne({ id: activeUser._id });
+    const session = await req.collections.sessions.findOne({ userId: activeUser._id });
 
     if (session) {
         return res.status(401).send({ message: `this account is already logged in` });
@@ -42,10 +42,18 @@ export const signIn = async (req, res) => {
 
     await req.collections.sessions.insertOne({
         token,
-        id: activeUser._id
+        userId: activeUser._id
     });
 
     res.status(200).send({ token, name });
+};
+
+export const signOut = async (req, res) => {
+    await req.collections.sessions.deleteOne({
+        userId: req.user._id,
+    });
+
+    res.sendStatus(200);
 };
 
 export const findProducts = async (req, res) => {

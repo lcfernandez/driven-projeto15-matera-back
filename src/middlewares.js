@@ -31,6 +31,32 @@ export const validate = schema => (req, res, next) => {
     next();
 };
 
+export const authenticate = async (req, res, next) => {
+    const { authorization } = req.headers;
+    const token = authorization?.replace("Bearer ", "");
+
+    if (!token) {
+        return res.status(401).send({
+            message: "Unauthorized"
+        });
+    }
+
+    const session = await req.collections.sessions.findOne({ token });
+    const user = await req.collections.users.findOne({ _id: session?.userId });
+
+    if (!user) {
+        return res.status(401).send({
+            message: "Unauthorized"
+        });
+    }
+
+    delete user.password;
+
+    req.user = user;
+
+    return next();
+};
+
 export const asyncError = handlerFn => async (req, res, next) => {
     try {
         await handlerFn(req, res, next);
