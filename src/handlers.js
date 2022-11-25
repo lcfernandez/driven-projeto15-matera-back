@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
 
 export const signUp = async (req, res) => {
     const { email, name, password } = req.body;
@@ -58,7 +59,7 @@ export const signOut = async (req, res) => {
 
 export const findCards = async (req, res) => {
     const user = req.user;
-    const cards = await req.collections.cards.find({userId: user._id }).toArray();
+    const cards = await req.collections.cards.find({ userId: user._id }).toArray();
     const filteredCards = cards.filter(c => {
         return {
             number: c.number,
@@ -68,8 +69,8 @@ export const findCards = async (req, res) => {
     });
     const hashedCards = filteredCards.map(c => {
         const hash = "************";
-        const hashedNumber = hash + c.number.substring(11,15);
-        return{
+        const hashedNumber = hash + c.number.substring(11, 15);
+        return {
             ...c,
             number: hashedNumber
         };
@@ -88,6 +89,29 @@ export const addCard = async (req, res) => {
     });
 
     res.sendStatus(201);
+};
+
+export const deleteCard = async (req, res) => {
+    const user = req.user;
+    const { id } = req.body;
+
+    const card = await req.collections.cards.findOne({ _id: ObjectId(id) });
+
+    if (!card) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!card.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    await req.collections.cards.deleteOne({ _id: ObjectId(id) });
+
+    res.status(200).send({message: "Cartão apagado com sucesso!"});
 };
 
 export const findProducts = async (req, res) => {
