@@ -93,7 +93,7 @@ export const addCard = async (req, res) => {
 
 export const deleteCard = async (req, res) => {
     const user = req.user;
-    const { id } = req.body;
+    const { id } = req.params;
 
     const card = await req.collections.cards.findOne({ _id: ObjectId(id) });
 
