@@ -5,12 +5,14 @@ export const collections = db => (req, _res, next) => {
     const sessions = db.collection("sessions");
     const purchases = db.collection("purchases");
     const products = db.collection("products");
+    const cards = db.collection("cards");
 
     req.collections = {
         users,
         sessions,
         purchases,
         products,
+        cards,
     };
 
     next();

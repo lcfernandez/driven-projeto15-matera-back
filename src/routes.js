@@ -12,6 +12,11 @@ export const routes = (app, db) => {
 
     app.post("/sign-out", middlewares.authenticate, middlewares.asyncError(handlers.signOut));
 
+    app.use(middlewares.authenticate);
+
+    app.get("/cards", middlewares.asyncError(handlers.findCards));
+    app.post("/cards", middlewares.validate(schemas.card), middlewares.asyncError(handlers.addCard));
+
     app.get("/products", middlewares.asyncError(handlers.findProducts));
     app.post("/products", middlewares.validate(schemas.product), middlewares.asyncError(handlers.addProduct));
 };

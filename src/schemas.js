@@ -22,3 +22,10 @@ export const product = joi.object({
     image: joi.string().required(),
     type: joi.valid("sofa", "cadeira", "mesa", "cama").required(),
 });
+
+export const card = joi.object({
+    number: joi.string().min(16).max(16).required(),
+    name: joi.string().min(3).required(),
+    code: joi.string().min(3).max(3).required(),
+    expiration: joi.string().min(5).max(5).required(),
+});
