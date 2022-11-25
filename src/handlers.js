@@ -48,6 +48,14 @@ export const signIn = async (req, res) => {
     res.status(200).send({ token, name });
 };
 
+export const signOut = async (req, res) => {
+    await req.collections.sessions.deleteOne({
+        userId: req.user._id,
+    });
+
+    res.sendStatus(200);
+};
+
 export const findProducts = async (req, res) => {
     const products = await req.collections.products
         .find()
