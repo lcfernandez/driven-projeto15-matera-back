@@ -56,6 +56,40 @@ export const signOut = async (req, res) => {
     res.sendStatus(200);
 };
 
+export const findCards = async (req, res) => {
+    const user = req.user;
+    const cards = await req.collections.cards.find({userId: user._id }).toArray();
+    const filteredCards = cards.filter(c => {
+        return {
+            number: c.number,
+            name: c.name,
+            expiration: c.expiration
+        };
+    });
+    const hashedCards = filteredCards.map(c => {
+        const hash = "************";
+        const hashedNumber = hash + c.number.substring(11,15);
+        return{
+            ...c,
+            number: hashedNumber
+        };
+    });
+
+    res.status(200).send(hashedCards);
+};
+
+export const addCard = async (req, res) => {
+    const user = req.user;
+    const card = req.body;
+
+    await req.collections.cards.insertOne({
+        userId: user._id,
+        ...card
+    });
+
+    res.sendStatus(201);
+};
+
 export const findProducts = async (req, res) => {
     const products = await req.collections.products
         .find()
