@@ -57,6 +57,75 @@ export const signOut = async (req, res) => {
     res.sendStatus(200);
 };
 
+export const findAddresses = async (req, res) => {
+    const user = req.user;
+    const addresses = await req.collections.addresses.find({ userId: user._id }).toArray();
+
+    res.status(200).send(addresses);
+};
+
+export const addAddress = async (req, res) => {
+    const user = req.user;
+    const address = req.body;
+
+    await req.collections.addresses.insertOne({
+        userId: user._id,
+        ...address
+    });
+
+    res.sendStatus(201);
+};
+
+export const updateAddress = async (req, res) => {
+    const user = req.user;
+    const { id } = req.params;
+    const newAddress = req.body;
+
+    const address = await req.collections.addresses.findOne({ _id: ObjectId(id) });
+    console.log(address);
+    if (!address) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!address.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    await req.collections.addresses.updateOne(
+        {_id: address._id},
+        {$set: newAddress}
+    );
+
+    res.status(200).send({message: "Endereço editado com sucesso!"});
+};
+
+export const deleteAddress = async (req, res) => {
+    const user = req.user;
+    const { id } = req.params;
+
+    const address = await req.collections.addresses.findOne({ _id: ObjectId(id) });
+
+    if (!address) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!address.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    await req.collections.addresses.deleteOne({ _id: ObjectId(id) });
+
+    res.status(200).send({ message: "Endereço apagado com sucesso!" });
+};
+
 export const findCards = async (req, res) => {
     const user = req.user;
     const cards = await req.collections.cards.find({ userId: user._id }).toArray();
@@ -111,7 +180,7 @@ export const deleteCard = async (req, res) => {
 
     await req.collections.cards.deleteOne({ _id: ObjectId(id) });
 
-    res.status(200).send({message: "Cartão apagado com sucesso!"});
+    res.status(200).send({ message: "Cartão apagado com sucesso!" });
 };
 
 export const findProducts = async (req, res) => {
