@@ -59,7 +59,7 @@ export const signOut = async (req, res) => {
 
 export const findAdresses = async (req, res) => {
     const user = req.user;
-    const adresses = await req.collections.adresses.find({userId: user._id});
+    const adresses = await req.collections.adresses.find({userId: user._id}).toArray();
 
     res.status(200).send(adresses);
 };
