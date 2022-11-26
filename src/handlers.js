@@ -57,47 +57,47 @@ export const signOut = async (req, res) => {
     res.sendStatus(200);
 };
 
-export const findAdresses = async (req, res) => {
+export const findAddresses = async (req, res) => {
     const user = req.user;
-    const adresses = await req.collections.adresses.find({ userId: user._id }).toArray();
+    const addresses = await req.collections.addresses.find({ userId: user._id }).toArray();
 
-    res.status(200).send(adresses);
+    res.status(200).send(addresses);
 };
 
-export const addAdress = async (req, res) => {
+export const addAddress = async (req, res) => {
     const user = req.user;
-    const adress = req.body;
+    const address = req.body;
 
-    await req.collections.adresses.insertOne({
+    await req.collections.addresses.insertOne({
         userId: user._id,
-        ...adress
+        ...address
     });
 
     res.sendStatus(201);
 };
 
-export const updateAdress = async (req, res) => {
+export const updateAddress = async (req, res) => {
     const user = req.user;
     const { id } = req.params;
-    const newAdress = req.body;
+    const newAddress = req.body;
 
-    const adress = await req.collections.adresses.findOne({ _id: ObjectId(id) });
-    console.log(adress);
-    if (!adress) {
+    const address = await req.collections.addresses.findOne({ _id: ObjectId(id) });
+    console.log(address);
+    if (!address) {
         return res.status(404).send({
             message: "Not Found"
         });
     }
 
-    if (!adress.userId.equals(user._id)) {
+    if (!address.userId.equals(user._id)) {
         return res.status(403).send({
             message: "Forbidden"
         });
     }
 
-    await req.collections.adresses.updateOne(
-        {_id: adress._id},
-        {$set: newAdress}
+    await req.collections.addresses.updateOne(
+        {_id: address._id},
+        {$set: newAddress}
     );
 
     res.status(200).send({message: "Endereço editado com sucesso!"});

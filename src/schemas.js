@@ -30,13 +30,13 @@ export const card = joi.object({
     expiration: joi.string().min(5).max(5).required(),
 });
 
-export const adress = joi.object({
+export const address = joi.object({
     firstName: joi.string().min(2).required(),
     lastName: joi.string().min(2).required(),
     phone: joi.string().min(13).max(13).required(),
     cep: joi.string().min(8).max(8).required(),
     estate: joi.string().min(2).max(2).required(),
-    adress: joi.string().required(),
+    address: joi.string().required(),
     number: joi.string().required(),
     district: joi.string().required(),
     city: joi.string().required(),
