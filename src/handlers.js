@@ -64,6 +64,18 @@ export const findAdresses = async (req, res) => {
     res.status(200).send(adresses);
 };
 
+export const addAdress = async (req, res) => {
+    const user = req.user;
+    const adress = req.body;
+
+    await req.collections.adresses.insertOne({
+        userId: user._id,
+        ...adress
+    });
+
+    res.sendStatus(201);
+};
+
 export const findCards = async (req, res) => {
     const user = req.user;
     const cards = await req.collections.cards.find({ userId: user._id }).toArray();
