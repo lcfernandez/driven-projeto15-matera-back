@@ -6,6 +6,7 @@ export const collections = db => (req, _res, next) => {
     const purchases = db.collection("purchases");
     const products = db.collection("products");
     const cards = db.collection("cards");
+    const adresses = db.collection("adresses");
 
     req.collections = {
         users,
@@ -13,6 +14,7 @@ export const collections = db => (req, _res, next) => {
         purchases,
         products,
         cards,
+        adresses,
     };
 
     next();
