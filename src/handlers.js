@@ -59,7 +59,7 @@ export const signOut = async (req, res) => {
 
 export const findAdresses = async (req, res) => {
     const user = req.user;
-    const adresses = await req.collections.adresses.find({userId: user._id}).toArray();
+    const adresses = await req.collections.adresses.find({ userId: user._id }).toArray();
 
     res.status(200).send(adresses);
 };
@@ -74,6 +74,33 @@ export const addAdress = async (req, res) => {
     });
 
     res.sendStatus(201);
+};
+
+export const updateAdress = async (req, res) => {
+    const user = req.user;
+    const { id } = req.params;
+    const newAdress = req.body;
+
+    const adress = await req.collections.adresses.findOne({ _id: ObjectId(id) });
+    console.log(adress);
+    if (!adress) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!adress.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    await req.collections.adresses.updateOne(
+        {_id: adress._id},
+        {$set: newAdress}
+    );
+
+    res.status(200).send({message: "Endereço editado com sucesso!"});
 };
 
 export const findCards = async (req, res) => {
@@ -130,7 +157,7 @@ export const deleteCard = async (req, res) => {
 
     await req.collections.cards.deleteOne({ _id: ObjectId(id) });
 
-    res.status(200).send({message: "Cartão apagado com sucesso!"});
+    res.status(200).send({ message: "Cartão apagado com sucesso!" });
 };
 
 export const findProducts = async (req, res) => {
