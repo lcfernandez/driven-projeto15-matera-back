@@ -103,6 +103,29 @@ export const updateAddress = async (req, res) => {
     res.status(200).send({message: "Endereço editado com sucesso!"});
 };
 
+export const deleteAddress = async (req, res) => {
+    const user = req.user;
+    const { id } = req.params;
+
+    const address = await req.collections.addresses.findOne({ _id: ObjectId(id) });
+
+    if (!address) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!address.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    await req.collections.addresses.deleteOne({ _id: ObjectId(id) });
+
+    res.status(200).send({ message: "Endereço apagado com sucesso!" });
+};
+
 export const findCards = async (req, res) => {
     const user = req.user;
     const cards = await req.collections.cards.find({ userId: user._id }).toArray();
