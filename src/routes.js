@@ -16,6 +16,7 @@ export const routes = (app, db) => {
 
     app.get("/adresses", middlewares.asyncError(handlers.findAdresses));
     app.post("/adresses", middlewares.validate(schemas.adress), middlewares.asyncError(handlers.addAdress));
+    app.put("/adresses/:id", middlewares.validate(schemas.adress), middlewares.asyncError(handlers.updateAdress));
 
     app.get("/cards", middlewares.asyncError(handlers.findCards));
     app.post("/cards", middlewares.validate(schemas.card), middlewares.asyncError(handlers.addCard));
