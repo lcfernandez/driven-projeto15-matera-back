@@ -12,6 +12,8 @@ export const routes = (app, db) => {
 
     app.post("/sign-out", middlewares.authenticate, middlewares.asyncError(handlers.signOut));
 
+    app.get("/products", middlewares.asyncError(handlers.findProducts));
+
     app.use(middlewares.authenticate);
 
     app.get("/addresses", middlewares.asyncError(handlers.findAddresses));
@@ -23,6 +25,5 @@ export const routes = (app, db) => {
     app.post("/cards", middlewares.validate(schemas.card), middlewares.asyncError(handlers.addCard));
     app.delete("/cards/:id", middlewares.asyncError(handlers.deleteCard));
 
-    app.get("/products", middlewares.asyncError(handlers.findProducts));
     app.post("/products", middlewares.validate(schemas.product), middlewares.asyncError(handlers.addProduct));
 };
