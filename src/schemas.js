@@ -46,12 +46,12 @@ export const address = joi.object({
 export const purchase = joi.object().keys({
     products: joi.array().items(
         joi.object({
-        _id: joi.string().hex().length(24).required(),
+        id: joi.string().hex().length(24).required(),
         name: joi.string().min(1).required(),
         price: joi.string().min(2).required(), 
         image: joi.string().required(),
-        qtd: joi.number().integer().strict().required(),
-        sumPrice: joi.number().integer().strict().required()
+        qtd: joi.number().integer().required(),
+        sumPrice: joi.number().integer().required()
     })).required(),
     deliveryAddress: joi.object({
         _id: joi.string().hex().length(24).required(),
@@ -70,9 +70,13 @@ export const purchase = joi.object().keys({
     shipping: joi.string().min(1).required(),
     paymentOption: joi.valid("Boleto Bancário", "Pix", "Cartão").required(),
     paymentComplement: joi.object({
+        _id: joi.string().hex().length(24).required(),
+        userId: joi.string().hex().length(24).required(),
         number: joi.string().min(16).max(16).required(),
         name: joi.string().min(3).required(),
         code: joi.string().min(3).max(3).required(),
         expiration: joi.string().min(5).max(5).required(),
-    })
+    }),
+    date: joi.string().required(),
+    time: joi.string().required()
 });
