@@ -68,7 +68,7 @@ export const purchase = joi.object().keys({
         complement: joi.any(),
     }).required(),
     shipping: joi.string().min(1).required(),
-    paymentOption: joi.valid("Boleto Bancário", "Pix", "Cartão").required(),
+    paymentOption: joi.valid("Boleto bancário", "Pix", "Cartão").required(),
     paymentComplement: joi.object({
         _id: joi.string().hex().length(24).required(),
         userId: joi.string().hex().length(24).required(),

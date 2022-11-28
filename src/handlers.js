@@ -210,3 +210,20 @@ export const addPurchase = async (req, res) => {
 
     res.sendStatus(201);
 };
+
+export const findPurchases = async (req, res) => {
+    const user = req.user;
+    const purchases = await req.collections.purchases.find({ userId: user._id }).toArray();
+    const filteredPurchases = purchases.map(p => {
+        return {
+            id: p._id,
+            firstProduct: p.products[0].name,
+            firstProductImage: p.products[0].image,
+            remainingProducts: p.products.length - 1,
+            date: p.date,
+            time: p.time
+        };
+    });
+
+    res.status(200).send(filteredPurchases);
+};
