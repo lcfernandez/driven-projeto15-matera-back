@@ -227,3 +227,23 @@ export const findPurchases = async (req, res) => {
 
     res.status(200).send(filteredPurchases);
 };
+
+export const findPurchase = async (req, res) => {
+    const user = req.user;
+    const { id } = req.params;
+    const purchase = await req.collections.purchases.findOne({ _id: ObjectId(id) });
+
+    if (!purchase) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!purchase.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    res.status(200).send(purchase);
+};
