@@ -215,7 +215,10 @@ export const addPurchase = async (req, res) => {
 
 export const findPurchases = async (req, res) => {
     const user = req.user;
-    const purchases = await req.collections.purchases.find({ userId: user._id }).toArray();
+    const purchases = await req.collections.purchases
+        .find({ userId: user._id })
+        .sort({ _id: -1 })
+        .toArray();
     const filteredPurchases = purchases.map(p => {
         return {
             id: p._id,
