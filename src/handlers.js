@@ -184,8 +184,10 @@ export const deleteCard = async (req, res) => {
 };
 
 export const findProducts = async (req, res) => {
+    const limit = req.query.limit ? Number(req.query.limit) : 0;
     const products = await req.collections.products
         .find()
+        .limit(limit)
         .sort({ date: -1 })
         .toArray();
 
