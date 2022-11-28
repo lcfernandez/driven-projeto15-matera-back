@@ -198,3 +198,15 @@ export const addProduct = async (req, res) => {
     await req.collections.products.insertOne({ ...product });
     res.sendStatus(201);
 };
+
+export const addPurchase = async (req, res) => {
+    const user = req.user;
+    const purchase = req.body;
+
+    await req.collections.purchases.insertOne({
+        userId: user._id,
+        ...purchase
+    });
+
+    res.sendStatus(201);
+};
