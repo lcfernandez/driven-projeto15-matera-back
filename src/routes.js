@@ -26,4 +26,8 @@ export const routes = (app, db) => {
     app.delete("/cards/:id", middlewares.asyncError(handlers.deleteCard));
 
     app.post("/products", middlewares.validate(schemas.product), middlewares.asyncError(handlers.addProduct));
+
+    app.get("/purchases", middlewares.asyncError(handlers.findPurchases));
+    app.get("/purchases/:id", middlewares.asyncError(handlers.findPurchase));
+    app.post("/purchases", middlewares.validate(schemas.purchase), middlewares.asyncError(handlers.addPurchase));
 };

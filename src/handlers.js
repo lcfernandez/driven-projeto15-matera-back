@@ -198,3 +198,52 @@ export const addProduct = async (req, res) => {
     await req.collections.products.insertOne({ ...product });
     res.sendStatus(201);
 };
+
+export const addPurchase = async (req, res) => {
+    const user = req.user;
+    const purchase = req.body;
+
+    await req.collections.purchases.insertOne({
+        userId: user._id,
+        ...purchase
+    });
+
+    res.sendStatus(201);
+};
+
+export const findPurchases = async (req, res) => {
+    const user = req.user;
+    const purchases = await req.collections.purchases.find({ userId: user._id }).toArray();
+    const filteredPurchases = purchases.map(p => {
+        return {
+            id: p._id,
+            firstProduct: p.products[0].name,
+            firstProductImage: p.products[0].image,
+            remainingProducts: p.products.length - 1,
+            date: p.date,
+            time: p.time
+        };
+    });
+
+    res.status(200).send(filteredPurchases);
+};
+
+export const findPurchase = async (req, res) => {
+    const user = req.user;
+    const { id } = req.params;
+    const purchase = await req.collections.purchases.findOne({ _id: ObjectId(id) });
+
+    if (!purchase) {
+        return res.status(404).send({
+            message: "Not Found"
+        });
+    }
+
+    if (!purchase.userId.equals(user._id)) {
+        return res.status(403).send({
+            message: "Forbidden"
+        });
+    }
+
+    res.status(200).send(purchase);
+};
